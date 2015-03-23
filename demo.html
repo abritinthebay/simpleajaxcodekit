@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<title>Simple AJAX Code-Kit (SACK) Demonstration</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="author" content="Gregory Wild-Smith" />
+	<meta name="copyright" content="Gregory Wild-Smith" />
+	<style type="text/css" media="screen">
+		@import url( style.css );
+	</style>
+	<script type="text/javascript" src="tw-sack.js"></script>
+<script type="text/javascript">
+var ajax = new sack();
+
+function whenLoading(){
+	var e = document.getElementById('replaceme'); 
+	e.innerHTML = "<p>Sending Data...</p>";
+}
+
+function whenLoaded(){
+	var e = document.getElementById('replaceme'); 
+	e.innerHTML = "<p>Data Sent...</p>";
+}
+
+function whenInteractive(){
+	var e = document.getElementById('replaceme'); 
+	e.innerHTML = "<p>getting data...</p>";
+}
+
+function whenCompleted(){
+	var e = document.getElementById('sackdata'); 
+	if (ajax.responseStatus){
+		var string = "<p>Status Code: " + ajax.responseStatus[0] + "</p><p>Status Message: " + ajax.responseStatus[1] + "</p><p>URLString Sent: " + ajax.URLString + "</p>";
+	} else {
+		var string = "<p>URLString Sent: " + ajax.URLString + "</p>";
+	}
+	e.innerHTML = string;	
+}
+
+function doit(){
+	var form = document.getElementById('form');
+	ajax.setVar("myTextBox", form.mytext.value); // recomended method of setting data to be parsed.
+	ajax.requestFile = "sackdemo.php";
+	ajax.method = form.method.value;
+	ajax.element = 'replaceme';
+	ajax.onLoading = whenLoading;
+	ajax.onLoaded = whenLoaded; 
+	ajax.onInteractive = whenInteractive;
+	ajax.onCompletion = whenCompleted;
+	ajax.runAJAX();
+}
+</script>
+</head>
+<body>
+<h1>SACK Demo Page</h1>
+<p><small>&#xA9;2005 Gregory Wild-Smith (http://www.twilightuniverse.com/)</small></p>
+<p>Here you can play around with some of the options of SACK and it gives some example code on how to use it. This is a really basic example, but it should be a good starting point. Enjoy playing with my SACK.</p>
+<h2>Playground</h2>
+<form id="form" method="post" action="sackdemo.php">
+<fieldset><legend>Play with these to change the output...</legend>
+	<label for="method">Method</label>
+	<select id="method" name="method">
+		<option value="GET">GET</option>
+		<option value="POST">POST</option>
+	</select>
+	<label for="mytext">Mytext(custom text)</label><textarea id="mytext" name="mytext">Some Dummy Text...</textarea>
+</fieldset>
+	<input type="submit" onClick="doit(); return false;" onDblClick="doit(); return false;" />
+</form>
+<div id="replaceme"></div>
+<div id="sackdata"></div>
+</body>
+</html>
